@@ -29,11 +29,7 @@ public class RocketMQController {
         user.setName("2415");
         user.setScore(10);
 
-        rocketMQTemplate.sendOneWay(
-                "test-topic:PAY",
-                user
-        );
-//        System.out.println(Result);
+        rocketMQTemplate.syncSend("test-topic:PAY",,3000,2);
         return "发送成功";
     }
 }
