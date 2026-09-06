@@ -29,20 +29,9 @@ public class RocketMQController {
         user.setName("2415");
         user.setScore(10);
 
-        rocketMQTemplate.asyncSend(
+        rocketMQTemplate.sendOneWay(
                 "test-topic:PAY",
-                user,
-                new SendCallback() {
-                    @Override
-                    public void onSuccess(SendResult sendResult) {
-                        System.out.println(sendResult);
-                    }
-
-                    @Override
-                    public void onException(Throwable e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
+                user
         );
 //        System.out.println(Result);
         return "发送成功";
