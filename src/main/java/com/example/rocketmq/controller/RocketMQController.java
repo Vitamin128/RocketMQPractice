@@ -2,7 +2,8 @@ package com.example.rocketmq.controller;
 
 
 import com.example.rocketmq.dao.User;
-import jakarta.websocket.SendResult;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +29,22 @@ public class RocketMQController {
         user.setName("2415");
         user.setScore(10);
 
-        org.apache.rocketmq.client.producer.SendResult Result= rocketMQTemplate.syncSend(
+        rocketMQTemplate.asyncSend(
                 "test-topic:PAY",
-                user
+                user,
+                new SendCallback() {
+                    @Override
+                    public void onSuccess(SendResult sendResult) {
+                        System.out.println(sendResult);
+                    }
+
+                    @Override
+                    public void onException(Throwable e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
         );
-        System.out.println(Result);
+//        System.out.println(Result);
         return "发送成功";
     }
 }
