@@ -7,3 +7,5 @@ rocketmq:
   name-server: 122.51.120.198:9876
   producer:
     group: producer-group
+server:
+  port: 9090
