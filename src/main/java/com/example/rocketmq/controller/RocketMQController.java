@@ -32,7 +32,11 @@ public class RocketMQController {
         user.setName("2415");
         user.setScore(10);
 
-        rocketMQTemplate.syncSend("test-topic:PAY", MessageBuilder.withPayload(user).build(),3000,2);
+        for(int i=0;i<5;i++)
+        {
+            user.setTime(i);
+            rocketMQTemplate.syncSend("test-topic:PAY", MessageBuilder.withPayload(user).build(),3000,2);
+        }
         return "发送成功";
     }
 }
