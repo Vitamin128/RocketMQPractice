@@ -7,6 +7,7 @@ import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.common.message.MessageConst;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tools.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/mq")
@@ -21,6 +23,8 @@ public class RocketMQController {
 
     private final RocketMQTemplate rocketMQTemplate;
 
+    @Autowired
+    ObjectMapper objectMapper;
     RocketMQController(RocketMQTemplate rocketMQTemplate)
     {
         this.rocketMQTemplate=rocketMQTemplate;
@@ -33,12 +37,8 @@ public class RocketMQController {
         user.setId(10);
         user.setName("2415");
         user.setScore(10);
-
-        for(int i=0;i<5;i++)
-        {
-            user.setTime(i);
-            rocketMQTemplate.syncSend("test-topic:PAY", MessageBuilder.withPayload(user).build(),3000,2);
-        }
+        String JsonMessage= objectMapper.writeValueAsString(user);
+        rocketMQTemplate.syncSend("test-topic:PAY", MessageBuilder.withPayload(JsonMessage).build(),3000,2);
         return "发送成功";
     }
 
