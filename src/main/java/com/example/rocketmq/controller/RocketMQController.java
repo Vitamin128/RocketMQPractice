@@ -17,47 +17,47 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tools.jackson.databind.ObjectMapper;
 
-@RestController
-@RequestMapping("/mq")
-public class RocketMQController {
-
-    private final RocketMQTemplate rocketMQTemplate;
-
-    @Autowired
-    ObjectMapper objectMapper;
-    RocketMQController(RocketMQTemplate rocketMQTemplate)
-    {
-        this.rocketMQTemplate=rocketMQTemplate;
-    }
-
-    @GetMapping("/send")
-    public String Send()
-    {
-        User user=new User();
-        user.setId(10);
-        user.setName("2415");
-        user.setScore(10);
-        String JsonMessage= objectMapper.writeValueAsString(user);
-        rocketMQTemplate.syncSend("test-topic:PAY", MessageBuilder.withPayload(JsonMessage).build(),3000,2);
-        return "发送成功";
-    }
-
-    @GetMapping("/sendKey")
-    public String SendKey()
-    {
-        Message<String>message=MessageBuilder.withPayload("hello-key-test")
-                .setHeader(MessageConst.PROPERTY_KEYS,"ORDER-1001")
-                .build();
-        SendResult result=new SendResult();
-        int count=10000;
-        while((count--)!=0)
-        {
-            result=rocketMQTemplate.syncSend("key_test_20261007",message);
-        }
-        if(result.getSendStatus().equals(SendStatus.SEND_OK))
-        {
-            return "Success";
-        }
-        return "FAIL";
-    }
-}
+//@RestController
+//@RequestMapping("/mq")
+//public class RocketMQController {
+//
+//    private final RocketMQTemplate rocketMQTemplate;
+//
+//    @Autowired
+//    ObjectMapper objectMapper;
+//    RocketMQController(RocketMQTemplate rocketMQTemplate)
+//    {
+//        this.rocketMQTemplate=rocketMQTemplate;
+//    }
+//
+//    @GetMapping("/send")
+//    public String Send()
+//    {
+//        User user=new User();
+//        user.setId(10);
+//        user.setName("2415");
+//        user.setScore(10);
+//        String JsonMessage= objectMapper.writeValueAsString(user);
+//        rocketMQTemplate.syncSend("test-topic:PAY", MessageBuilder.withPayload(JsonMessage).build(),3000,2);
+//        return "发送成功";
+//    }
+//
+//    @GetMapping("/sendKey")
+//    public String SendKey()
+//    {
+//        Message<String>message=MessageBuilder.withPayload("hello-key-test")
+//                .setHeader(MessageConst.PROPERTY_KEYS,"ORDER-1001")
+//                .build();
+//        SendResult result=new SendResult();
+//        int count=10000;
+//        while((count--)!=0)
+//        {
+//            result=rocketMQTemplate.syncSend("key_test_20261007",message);
+//        }
+//        if(result.getSendStatus().equals(SendStatus.SEND_OK))
+//        {
+//            return "Success";
+//        }
+//        return "FAIL";
+//    }
+//}
