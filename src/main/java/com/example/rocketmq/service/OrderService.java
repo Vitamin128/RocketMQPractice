@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService {
-//    @Autowired
-//    private PayService payService;
 
-    @Resource(name="weChatService")
-    private PayService payService;
-
+    private final PayService payService;
+    OrderService(WeChatService payServiceOut)
+    {
+        payService=payServiceOut;
+    }
     public String pay()
     {
         return payService.pay();
